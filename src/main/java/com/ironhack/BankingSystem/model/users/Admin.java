@@ -1,5 +1,5 @@
 package com.ironhack.BankingSystem.model.users;
 
-public class Admins extends User{
+public class Admin extends User{
 
 }

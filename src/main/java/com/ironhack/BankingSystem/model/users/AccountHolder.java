@@ -2,13 +2,15 @@ package com.ironhack.BankingSystem.model.users;
 
 import com.ironhack.BankingSystem.model.Accounts.Account;
 import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-
-public class AccountHolders extends User{
+@Entity
+public class AccountHolder extends User{
 
     private LocalDate dateOfBirth;
 
@@ -18,10 +20,10 @@ public class AccountHolders extends User{
     @Embedded
     private Address mailingAddress;
 
-   @OneToMany
-   private List<Account> primaryOwner;
+   @OneToMany(mappedBy = "primaryOwner")
+   private List<Account> primaryOwnerAccounts= new ArrayList<>();
 
 
-   @OneToMany
-   private List<Account> secondaryOwner;
+   @OneToMany(mappedBy = "secondaryOwner")
+   private List<Account> secondaryOwnerAccounts= new ArrayList<>();
 }
