@@ -42,8 +42,8 @@ class CreditCard extends Account{
         return interestRate;
     }
 
-    public void setInterestRate(double interestRate) throws Exception{
-       if(Double.isNaN(interestRate)){
+    public void setInterestRate(Double interestRate) throws Exception{
+       if(interestRate == null){
            this.interestRate=0.2;
        }
         if(interestRate>0.2 || interestRate<0.1){
