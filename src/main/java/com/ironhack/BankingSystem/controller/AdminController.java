@@ -48,7 +48,7 @@ public class AdminController {
 
     @PatchMapping("/update_account/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    public Account updateAccountData(@RequestBody AccountDTO accountDTO, @PathVariable Long accountId){
+    public Account updateAccountData(@RequestBody AccountDTO accountDTO, @PathVariable Long accountId) throws Exception {
         return adminService.updateAccount(accountDTO, accountId);
     }
 

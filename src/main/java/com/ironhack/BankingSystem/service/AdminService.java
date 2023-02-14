@@ -107,7 +107,7 @@ public class AdminService {
 
     }
 
-    public Account updateAccount (AccountDTO accountDTO, Long accountId) {
+    public Account updateAccount (AccountDTO accountDTO, Long accountId) throws Exception {
         Account account = accountRepository.findById(accountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
 
 
@@ -122,16 +122,39 @@ public class AdminService {
             account.setSecondaryOwner(newSecondaryOwnerId);
         }
 
-
-        if (account instanceof Savings) {
-            //mirar si tot el q tenen en comu ens ho han passat
 //instanceOf or isInstance()?¿?¿?¿
+        if (account instanceof  Checking){
+            Checking checkingAccount= (Checking) account;
+            if(checkingAccount.getStatus() != null){
+                checkingAccount.setStatus(checkingAccount.getStatus());
+            }
+        }
 
-            //check per each account id that id is from (savings, creditcard...)
-            //
-            return null;
+        if (account instanceof StudentChecking){
+            StudentChecking studentCheckingAccount = (StudentChecking) account;
+            if  (studentCheckingAccount.getStatus() != null){
+               studentCheckingAccount.setStatus(studentCheckingAccount.getStatus());
+            }
+        }
+        if (account instanceof Savings) {
+            Savings savingsAccount = (Savings) account;
+            if (accountDTO.getNewInterestRate() != null)
+                savingsAccount.setInterestRate(accountDTO.getNewInterestRate());
+            if (savingsAccount.getStatus() != null) {
+                savingsAccount.setStatus(savingsAccount.getStatus());
+            }
+        }
+
+        if (account instanceof CreditCard) {
+            CreditCard creditCardAccount= (CreditCard) account;
+            if (accountDTO.getNewCreditLimit() != null)
+                creditCardAccount.setCreditLimit(accountDTO.getNewCreditLimit());
+            if (accountDTO.getNewInterestRate() != null)
+                creditCardAccount.setInterestRate(accountDTO.getNewInterestRate());
         }
         return accountRepository.save(account);
     }
 
+
 }
+
