@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Entity
 public class Savings extends Account {
-    private BigDecimal interestRate=new BigDecimal("0.0025");
+    private Double interestRate=0.0025;
 
 
     private BigDecimal minimumBalance= new BigDecimal("1000");
@@ -22,24 +22,24 @@ public class Savings extends Account {
     public Savings() {
     }
 
-    public Savings(BigDecimal balance, String secretKey, AccountHolder primaryOwner, AccountHolder secondaryOwner, BigDecimal interestRate,  BigDecimal minimumBalance) throws Exception {
+    public Savings(BigDecimal balance, String secretKey, AccountHolder primaryOwner, AccountHolder secondaryOwner, Double interestRate,  BigDecimal minimumBalance) throws Exception {
         super(balance, secretKey, primaryOwner, secondaryOwner);
         setInterestRate(interestRate);
         setMinimumBalance(minimumBalance);
     }
 
-    public BigDecimal getInterestRate() {
+    public Double getInterestRate() {
         return interestRate;
     }
 
 
-    public void setInterestRate(BigDecimal interestRate) throws Exception {
+    public void setInterestRate(Double interestRate) throws Exception {
             if(interestRate == null){
-                this.interestRate= new BigDecimal("0.0025");
+                this.interestRate= 0.0025;
             }
-            if(interestRate.compareTo(new BigDecimal("0.0025")) == -1 || interestRate.compareTo(new BigDecimal("0.5")) == 1){
+            if(interestRate < 0.0025 || interestRate> 0.5) {
                 throw new IllegalArgumentException("Interest rate should be between 0.0025 and 0.5");
-            } else{
+            } else {
                 this.interestRate = interestRate;
             }
             /*    BigDecimal minRate = new BigDecimal("0.0025");

@@ -2,6 +2,7 @@ package com.ironhack.BankingSystem.controller;
 
 import com.ironhack.BankingSystem.dto.AccountDTO;
 import com.ironhack.BankingSystem.model.Accounts.Account;
+import com.ironhack.BankingSystem.model.Accounts.Savings;
 import com.ironhack.BankingSystem.repository.AccountRepository;
 import com.ironhack.BankingSystem.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,19 @@ public class AdminController {
 
     @PostMapping("/create_checking_account")
     @ResponseStatus(HttpStatus.CREATED)
-    public Account createCheckingAccount (@RequestBody AccountDTO accountDTO){
+    public Account createNewCheckingAccount (@RequestBody AccountDTO accountDTO){
         return adminService.createCheckingAccount(accountDTO);
+    }
+
+    @PostMapping ("/create_savings_account")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Account createNewSavingsAccount (@RequestBody AccountDTO accountDTO) throws Exception {
+        return adminService.createSavingsAccount(accountDTO);
+    }
+
+    @PostMapping("/create_creditcard_account")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Account createNewCreditCardAccount (@RequestBody AccountDTO accountDTO) throws Exception{
+        return adminService.createCreditCardAccount(accountDTO);
     }
 }

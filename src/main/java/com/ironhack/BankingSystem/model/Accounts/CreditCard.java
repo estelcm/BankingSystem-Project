@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import java.math.BigDecimal;
 
 @Entity
-class CreditCard extends Account{
+public class CreditCard extends Account{
     private BigDecimal creditLimit= new BigDecimal("100");
 
     private Double interestRate = 0.2;

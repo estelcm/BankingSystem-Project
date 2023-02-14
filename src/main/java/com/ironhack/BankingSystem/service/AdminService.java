@@ -4,9 +4,7 @@ package com.ironhack.BankingSystem.service;
 import com.ironhack.BankingSystem.controller.AccountController;
 import com.ironhack.BankingSystem.controller.AdminController;
 import com.ironhack.BankingSystem.dto.AccountDTO;
-import com.ironhack.BankingSystem.model.Accounts.Account;
-import com.ironhack.BankingSystem.model.Accounts.Checking;
-import com.ironhack.BankingSystem.model.Accounts.StudentChecking;
+import com.ironhack.BankingSystem.model.Accounts.*;
 import com.ironhack.BankingSystem.model.users.AccountHolder;
 import com.ironhack.BankingSystem.repository.AccountHolderRepository;
 import com.ironhack.BankingSystem.repository.AccountRepository;
@@ -26,7 +24,7 @@ public class AdminService {
     @Autowired
     AccountController accountController;
     @Autowired
-   AccountRepository accountRepository;
+    AccountRepository accountRepository;
 
     @Autowired
     AdminRepository adminRepository;
@@ -35,34 +33,62 @@ public class AdminService {
     AccountHolderRepository accountHolderRepository;
 
 
-
     /*
     When creating a new Checking account, if the primaryOwner is less than 24, a StudentChecking account should be created otherwise a regular Checking Account should be created.
      */
-    public Account createCheckingAccount (AccountDTO accountDTO){
+    public Account createCheckingAccount(AccountDTO accountDTO) {
 
 
-       if(accountHolderRepository.findById(accountDTO.getNewPrimaryOwner()).isPresent()) {
-           AccountHolder primaryOwner = accountHolderRepository.findById(accountDTO.getNewPrimaryOwner()).get();
-           AccountHolder secondaryOwner = null;
+        if (accountHolderRepository.findById(accountDTO.getNewPrimaryOwner()).isPresent()) {
+            AccountHolder primaryOwner = accountHolderRepository.findById(accountDTO.getNewPrimaryOwner()).get();
+            AccountHolder secondaryOwner = null;
 
-           if (accountDTO.getNewSecundaryOwner() != null) {
-               if (accountHolderRepository.findById(accountDTO.getNewSecundaryOwner()).isPresent()) {
-                   secondaryOwner = accountHolderRepository.findById(accountDTO.getNewSecundaryOwner()).get();
-               }
-           }
+            if (accountDTO.getNewSecondaryOwner() != null) {
+                if (accountHolderRepository.findById(accountDTO.getNewSecondaryOwner()).isPresent()) {
+                    secondaryOwner = accountHolderRepository.findById(accountDTO.getNewSecondaryOwner()).get();
+                }
+            }
 
 
-           if (Period.between(primaryOwner.getDateOfBirth(), LocalDate.now()).getYears() >= 24) {
-               return accountRepository.save(new Checking(accountDTO.getNewBalance(), accountDTO.getNewSecretKey(), primaryOwner, null));
+            if (Period.between(primaryOwner.getDateOfBirth(), LocalDate.now()).getYears() >= 24) {
+                return accountRepository.save(new Checking(accountDTO.getNewBalance(), accountDTO.getNewSecretKey(), primaryOwner, secondaryOwner));
 
-           } else {
-               return accountRepository.save(new StudentChecking(accountDTO.getNewBalance(), accountDTO.getNewSecretKey(), primaryOwner, secondaryOwner));
-           }
-       }
+            } else {
+                return accountRepository.save(new StudentChecking(accountDTO.getNewBalance(), accountDTO.getNewSecretKey(), primaryOwner, secondaryOwner));
+            }
+        }
 
-      throw new IllegalArgumentException("Before creating the Account you need to select a primary Account Holder");
+        throw new IllegalArgumentException("Before creating the Account,a primary Account Holder needs to be created");
     }
 
+    public Account createSavingsAccount(AccountDTO accountDTO) throws Exception {
 
+        if (accountHolderRepository.findById(accountDTO.getNewPrimaryOwner()).isPresent()) {
+            AccountHolder primaryOwner = accountHolderRepository.findById(accountDTO.getNewPrimaryOwner()).get();
+            AccountHolder secondaryOwner = null;
+            if (accountDTO.getNewSecondaryOwner() != null) {
+                if (accountHolderRepository.findById(accountDTO.getNewSecondaryOwner()).isPresent()) {
+                    secondaryOwner = accountHolderRepository.findById(accountDTO.getNewSecondaryOwner()).get();
+                }
+            }
+            return accountRepository.save(new Savings(accountDTO.getNewBalance(), accountDTO.getNewSecretKey(), primaryOwner, secondaryOwner, accountDTO.getNewCreditLimit(), accountDTO.getNewInterestRate()));
+        }
+
+        throw new IllegalArgumentException("Before creating a Savings Account,a primary Account Holder needs to be created");
+
+    }
+
+    public Account createCreditCardAccount(AccountDTO accountDTO) throws Exception {
+        if (accountHolderRepository.findById(accountDTO.getNewPrimaryOwner()).isPresent()) {
+            AccountHolder primaryOwner = accountHolderRepository.findById(accountDTO.getNewPrimaryOwner()).get();
+            AccountHolder secondaryOwner = null;
+            if (accountDTO.getNewSecondaryOwner() != null) {
+                if (accountHolderRepository.findById(accountDTO.getNewSecondaryOwner()).isPresent()) {
+                    secondaryOwner = accountHolderRepository.findById(accountDTO.getNewSecondaryOwner()).get();
+                }
+            }
+            return accountRepository.save(new CreditCard (accountDTO.getNewBalance(),accountDTO.getNewSecretKey(),primaryOwner, secondaryOwner,accountDTO.getNewCreditLimit(),accountDTO.getNewInterestRate()));
+        }
+        throw new IllegalArgumentException("Before creating a CreditCard Account,a primary Account Holder needs to be created");
+    }
 }

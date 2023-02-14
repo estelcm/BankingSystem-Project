@@ -10,20 +10,24 @@ public class AccountDTO {
 
     private Integer newPrimaryOwner;
 
-    private Integer newSecundaryOwner;
-
-    private final BigDecimal penaltyFee= new BigDecimal("40");
-
-    private final LocalDate creationDate = LocalDate.now();
-
-    //primary owner y secundary owner Long
+    private Integer newSecondaryOwner;
 
 
-    public AccountDTO(BigDecimal newBalance, String newSecretKey, Integer newPrimaryOwner, Integer newSecundaryOwner) {
+
+    //interestRate needed for SavingsAccount && CreditCard
+    private BigDecimal newInterestRate;
+
+  //creditLimit just needed for CreditCard
+  private BigDecimal newCreditLimit;
+
+
+    public AccountDTO(BigDecimal newBalance, String newSecretKey, Integer newPrimaryOwner, Integer newSecondaryOwner, BigDecimal interestRate, BigDecimal creditLimit) {
         this.newBalance = newBalance;
         this.newSecretKey = newSecretKey;
         this.newPrimaryOwner = newPrimaryOwner;
-        this.newSecundaryOwner = newSecundaryOwner;
+        this.newSecondaryOwner = newSecondaryOwner;
+        this.newInterestRate = interestRate;
+        this.newCreditLimit = creditLimit;
     }
 
     public BigDecimal getNewBalance() {
@@ -50,12 +54,12 @@ public class AccountDTO {
         this.newPrimaryOwner = newPrimaryOwner;
     }
 
-    public Integer getNewSecundaryOwner() {
-        return newSecundaryOwner;
+    public Integer getNewSecondaryOwner() {
+        return newSecondaryOwner;
     }
 
-    public void setNewSecundaryOwner(Integer newSecundaryOwner) {
-        this.newSecundaryOwner = newSecundaryOwner;
+    public void setNewSecondaryOwner(Integer newSecondaryOwner) {
+        this.newSecondaryOwner = newSecondaryOwner;
     }
 
     public BigDecimal getPenaltyFee() {
@@ -64,6 +68,22 @@ public class AccountDTO {
 
     public LocalDate getCreationDate() {
         return creationDate;
+    }
+
+    public BigDecimal getNewInterestRate() {
+        return newInterestRate;
+    }
+
+    public void setNewInterestRate(BigDecimal interestRate) {
+        this.newInterestRate = interestRate;
+    }
+
+    public BigDecimal getNewCreditLimit() {
+        return newCreditLimit;
+    }
+
+    public void setNewCreditLimit(BigDecimal creditLimit) {
+        this.newCreditLimit = creditLimit;
     }
 }
 
