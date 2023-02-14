@@ -1,33 +1,30 @@
 package com.ironhack.BankingSystem.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 public class AccountDTO {
     private BigDecimal newBalance;
 
     private String newSecretKey;
 
-    private Integer newPrimaryOwner;
+    private Integer newPrimaryOwnerId;
 
-    private Integer newSecondaryOwner;
-
-
+    private Integer newSecondaryOwnerId;
 
     //interestRate needed for SavingsAccount && CreditCard
-    private BigDecimal newInterestRate;
+    private Double newInterestRate;
 
   //creditLimit just needed for CreditCard
   private BigDecimal newCreditLimit;
 
 
-    public AccountDTO(BigDecimal newBalance, String newSecretKey, Integer newPrimaryOwner, Integer newSecondaryOwner, BigDecimal interestRate, BigDecimal creditLimit) {
+    public AccountDTO(BigDecimal newBalance, String newSecretKey, Integer newPrimaryOwner, Integer newSecondaryOwner, Double newInterestRate, BigDecimal newCreditLimit) {
         this.newBalance = newBalance;
         this.newSecretKey = newSecretKey;
-        this.newPrimaryOwner = newPrimaryOwner;
-        this.newSecondaryOwner = newSecondaryOwner;
-        this.newInterestRate = interestRate;
-        this.newCreditLimit = creditLimit;
+        this.newPrimaryOwnerId = newPrimaryOwner;
+        this.newSecondaryOwnerId = newSecondaryOwner;
+        this.newInterestRate = newInterestRate;
+        this.newCreditLimit = newCreditLimit;
     }
 
     public BigDecimal getNewBalance() {
@@ -46,35 +43,29 @@ public class AccountDTO {
         this.newSecretKey = newSecretKey;
     }
 
-    public Integer getNewPrimaryOwner() {
-        return newPrimaryOwner;
+    public Integer getNewPrimaryOwnerId() {
+        return newPrimaryOwnerId;
     }
 
-    public void setNewPrimaryOwner(Integer newPrimaryOwner) {
-        this.newPrimaryOwner = newPrimaryOwner;
+    public void setNewPrimaryOwnerId(Integer newPrimaryOwnerId) {
+        this.newPrimaryOwnerId = newPrimaryOwnerId;
     }
 
-    public Integer getNewSecondaryOwner() {
-        return newSecondaryOwner;
+    public Integer getNewSecondaryOwnerId() {
+        return newSecondaryOwnerId;
     }
 
-    public void setNewSecondaryOwner(Integer newSecondaryOwner) {
-        this.newSecondaryOwner = newSecondaryOwner;
+    public void setNewSecondaryOwnerId(Integer newSecondaryOwnerId) {
+        this.newSecondaryOwnerId = newSecondaryOwnerId;
     }
 
-    public BigDecimal getPenaltyFee() {
-        return penaltyFee;
-    }
 
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
 
-    public BigDecimal getNewInterestRate() {
+    public Double getNewInterestRate() {
         return newInterestRate;
     }
 
-    public void setNewInterestRate(BigDecimal interestRate) {
+    public void setNewInterestRate(Double interestRate) {
         this.newInterestRate = interestRate;
     }
 

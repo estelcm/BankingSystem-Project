@@ -42,12 +42,7 @@ public class Savings extends Account {
             } else {
                 this.interestRate = interestRate;
             }
-            /*    BigDecimal minRate = new BigDecimal("0.0025");
-    BigDecimal maxRate = new BigDecimal("0.5");
 
-    if (interestRate.compareTo(minRate) < 0 || interestRate.compareTo(maxRate) > 0) {
-        throw new Exception("Interest rate should be between 0.0025 and 0.5");
-    }*/
     }
 
 
