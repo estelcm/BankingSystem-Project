@@ -52,5 +52,11 @@ public class AdminController {
         return adminService.updateAccount(accountDTO, accountId);
     }
 
+    @DeleteMapping("/delete-account/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteAccountAndData (@PathVariable Long accountId){
+        adminService.deleteAccount(accountId);
+    }
+
 
 }

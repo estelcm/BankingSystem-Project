@@ -5,6 +5,7 @@ import com.ironhack.BankingSystem.model.users.AccountHolder;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,6 +19,8 @@ public class Savings extends Account {
 
     @Enumerated(EnumType.STRING)
     private Status status=Status.ACTIVE;
+
+    private LocalDate lastYearInterestRate= LocalDate.now();
 
     public Savings() {
     }
@@ -68,5 +71,13 @@ public class Savings extends Account {
             throw new IllegalArgumentException("Minimum balance should be between 1000 and 100");
         }
         this.minimumBalance = minimumBalance;
+    }
+
+    public LocalDate getLastYearInterestRate() {
+        return lastYearInterestRate;
+    }
+
+    public void setLastYearInterestRate(LocalDate lastYearInterestRate) {
+        this.lastYearInterestRate = lastYearInterestRate;
     }
 }

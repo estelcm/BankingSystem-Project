@@ -122,7 +122,8 @@ public class AdminService {
             account.setSecondaryOwner(newSecondaryOwnerId);
         }
 
-//instanceOf or isInstance()?¿?¿?¿
+        //instanceOf or isInstance()?¿?¿?¿
+
         if (account instanceof  Checking){
             Checking checkingAccount= (Checking) account;
             if(checkingAccount.getStatus() != null){
@@ -153,6 +154,10 @@ public class AdminService {
                 creditCardAccount.setInterestRate(accountDTO.getNewInterestRate());
         }
         return accountRepository.save(account);
+    }
+
+    public void deleteAccount (long accountId){
+        accountRepository.delete(accountRepository.findById(accountId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found")));
     }
 
 

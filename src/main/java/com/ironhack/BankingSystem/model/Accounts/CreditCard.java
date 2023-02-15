@@ -4,12 +4,15 @@ import com.ironhack.BankingSystem.model.users.AccountHolder;
 import jakarta.persistence.Entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 public class CreditCard extends Account{
     private BigDecimal creditLimit= new BigDecimal("100");
 
     private Double interestRate = 0.2;
+
+    private LocalDate lastYearInterestRate= LocalDate.now();
 
 
     public CreditCard() {
@@ -51,5 +54,13 @@ public class CreditCard extends Account{
         } else {
             this.interestRate = interestRate;
         }
+    }
+
+    public LocalDate getLastYearInterestRate() {
+        return lastYearInterestRate;
+    }
+
+    public void setLastYearInterestRate(LocalDate lastYearInterestRate) {
+        this.lastYearInterestRate = lastYearInterestRate;
     }
 }

@@ -19,6 +19,8 @@ public class Checking extends Account{
     @Enumerated(EnumType.STRING)
     private Status status= Status.ACTIVE;
 
+    private LocalDate lasMonthMaintenanceFee= LocalDate.now();
+
     public Checking() {
     }
 
@@ -49,5 +51,13 @@ public class Checking extends Account{
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public LocalDate getLasMonthMaintenanceFee() {
+        return lasMonthMaintenanceFee;
+    }
+
+    public void setLasMonthMaintenanceFee(LocalDate lasMonthMaintenanceFee) {
+        this.lasMonthMaintenanceFee = lasMonthMaintenanceFee;
     }
 }
