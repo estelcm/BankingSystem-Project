@@ -31,6 +31,8 @@ public abstract class Account {
 
     private final LocalDate creationDate = LocalDate.now();
 
+    private LocalDate LastPenaltyFee = LocalDate.now();
+
     public Account() {
     }
 
@@ -88,5 +90,13 @@ public abstract class Account {
 
     public LocalDate getCreationDate() {
         return creationDate;
+    }
+
+    public LocalDate getLastPenaltyFee() {
+        return LastPenaltyFee;
+    }
+
+    public void setLastPenaltyFee(LocalDate lastPenaltyFee) {
+        LastPenaltyFee = lastPenaltyFee;
     }
 }

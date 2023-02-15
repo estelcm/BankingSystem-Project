@@ -25,7 +25,8 @@ public class AccountHolder extends User{
             @AttributeOverride(name="city", column = @Column(name= "mailing_city")),
             @AttributeOverride(name="country", column = @Column(name= "mailing_country")),
     })
-            private Address mailingAddress;
+
+    private Address mailingAddress;
 
 
    @OneToMany(mappedBy = "primaryOwner")
@@ -39,7 +40,8 @@ public class AccountHolder extends User{
     public AccountHolder() {
     }
 
-    public AccountHolder(LocalDate dateOfBirth, Address primaryAddress, Address mailingAddress) {
+    public AccountHolder(String name, LocalDate dateOfBirth, Address primaryAddress, Address mailingAddress) {
+        super(name);
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;
