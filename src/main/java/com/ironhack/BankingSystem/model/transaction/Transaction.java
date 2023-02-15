@@ -25,10 +25,56 @@ public class Transaction {
     @JoinColumn(name="target_account_id")
     private Account targetAccount;
 
-    //do we need a date?
 
-    //still to create constructors and getters-setters
+    public Transaction() {
+    }
+
+    public Transaction(String targetAccountHolderName, BigDecimal amount, Account originAccount, Account targetAccount) {
+        this.targetAccountHolderName = targetAccountHolderName;
+        this.amount = amount;
+        this.originAccount = originAccount;
+        this.targetAccount = targetAccount;
+
+    }
 
 
+    public Long getTransactionId() {
+        return transactionId;
+    }
 
+    public void setTransactionId(Long transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public String getTargetAccountHolderName() {
+        return targetAccountHolderName;
+    }
+
+    public void setTargetAccountHolderName(String targetAccountHolderName) {
+        this.targetAccountHolderName = targetAccountHolderName;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public Account getOriginAccount() {
+        return originAccount;
+    }
+
+    public void setOriginAccount(Account originAccount) {
+        this.originAccount = originAccount;
+    }
+
+    public Account getTargetAccount() {
+        return targetAccount;
+    }
+
+    public void setTargetAccount(Account targetAccount) {
+        this.targetAccount = targetAccount;
+    }
 }
