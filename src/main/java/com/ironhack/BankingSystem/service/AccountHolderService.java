@@ -1,4 +1,5 @@
 package com.ironhack.BankingSystem.service;
+import com.ironhack.BankingSystem.model.Accounts.CreditCard;
 import com.ironhack.BankingSystem.model.transaction.Transaction;
 
 import com.ironhack.BankingSystem.dto.AccountHolderDTO;
@@ -37,6 +38,7 @@ public class AccountHolderService {
         return accountHolderRepository.save(accountHolder);
     }
 
+
     public BigDecimal checkBalance(Long accountId) {
         Account account = accountRepository.findById(accountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
         return account.getBalance();
@@ -50,40 +52,57 @@ public class AccountHolderService {
 
         Account originAccount;
         Long accountId = transactionDTO.getOriginAccountId();
-// añadir amoun bigger than balance throw exception.
+        Transaction transaction;
+
         if (accountRepository.findById(accountId).isPresent()) {
             originAccount = accountRepository.findById(accountId).get();
-            if (originAccount instanceof Checking) {
-                if (originAccount.getBalance().compareTo(((Checking) originAccount).getMinimumBalance()) < 0) ;
-                originAccount.setBalance(originAccount.getBalance().subtract(originAccount.getPenaltyFee()));
-                accountRepository.save(originAccount);
-            }
 
-
-            if (originAccount instanceof Savings) {
-                if (originAccount.getBalance().compareTo(((Savings) originAccount).getMinimumBalance()) < 0) {
-                    originAccount.setBalance(originAccount.getBalance().subtract(originAccount.getPenaltyFee()));
-                    accountRepository.save(originAccount);
-                }
-            }
             if (originAccount.getBalance().compareTo(transactionDTO.getAmount()) > 0) {
                 originAccount.setBalance(originAccount.getBalance().subtract(transactionDTO.getAmount()));
                 targetAccount.setBalance(targetAccount.getBalance().add(transactionDTO.getAmount()));
                 accountRepository.save(originAccount);
                 accountRepository.save(targetAccount);
 
-                Transaction transaction = new Transaction(transactionDTO.getTargetAccountHolderName(), transactionDTO.getAmount(), originAccount, targetAccount);
+                transaction = new Transaction(transactionDTO.getTargetAccountHolderName(), transactionDTO.getAmount(), originAccount, targetAccount);
                 transactionRepository.save(transaction);
-                return transaction;
+
+                if (originAccount instanceof Checking) {
+                    if (originAccount.getBalance().compareTo(((Checking) originAccount).getMinimumBalance()) < 0) ;
+                    originAccount.setBalance(originAccount.getBalance().subtract(originAccount.getPenaltyFee()));
+                    accountRepository.save(originAccount);
+                }
+
+
+                if (originAccount instanceof Savings) {
+                    Savings savingsAccount = (Savings) originAccount;
+                    savingsAccount.applyInterestRate();
+                    if (savingsAccount.getBalance().compareTo(((Savings) savingsAccount).getMinimumBalance()) < 0) {
+                        savingsAccount.setBalance(savingsAccount.getBalance().subtract(savingsAccount.getPenaltyFee()));
+                        accountRepository.save(savingsAccount);
+                    }
+                }
+
+                if(originAccount instanceof CreditCard){
+                    CreditCard creditCardAccount= (CreditCard) originAccount;
+                    creditCardAccount.applyInterestRate();
+                }
+
 
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough funds");
             }
 
 
-        } else {
+
+
+
+        }
+
+
+        else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Origin account not found");
         }
+        return transaction;
 
     }
 }

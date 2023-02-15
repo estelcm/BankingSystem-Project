@@ -1,8 +1,10 @@
 package com.ironhack.BankingSystem.controller;
 
 import com.ironhack.BankingSystem.dto.AccountDTO;
+import com.ironhack.BankingSystem.dto.ThirdPartyDTO;
 import com.ironhack.BankingSystem.model.Accounts.Account;
 import com.ironhack.BankingSystem.model.Accounts.Savings;
+import com.ironhack.BankingSystem.model.users.ThirdParty;
 import com.ironhack.BankingSystem.repository.AccountRepository;
 import com.ironhack.BankingSystem.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +60,9 @@ public class AdminController {
         adminService.deleteAccount(accountId);
     }
 
-
+    @PostMapping("/create_third_party")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ThirdParty createThirdParty(@RequestBody ThirdPartyDTO thirdPartyDTO) {
+        return adminService.createThirdPartyUser(thirdPartyDTO);
+    }
 }

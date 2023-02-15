@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 public class CreditCard extends Account{
@@ -12,7 +13,7 @@ public class CreditCard extends Account{
 
     private Double interestRate = 0.2;
 
-    private LocalDate lastYearInterestRate= LocalDate.now();
+    private LocalDate lastMonthInterestRate = LocalDate.now();
 
 
     public CreditCard() {
@@ -56,11 +57,20 @@ public class CreditCard extends Account{
         }
     }
 
-    public LocalDate getLastYearInterestRate() {
-        return lastYearInterestRate;
+    public LocalDate getLastMonthInterestRate() {
+        return lastMonthInterestRate;
     }
 
-    public void setLastYearInterestRate(LocalDate lastYearInterestRate) {
-        this.lastYearInterestRate = lastYearInterestRate;
+    public void setLastMonthInterestRate(LocalDate lastMonthInterestRate) {
+        this.lastMonthInterestRate = lastMonthInterestRate;
     }
+
+    public void applyInterestRate () {
+        if(Period.between(lastMonthInterestRate,LocalDate.now()).getMonths()>1){
+            setLastMonthInterestRate(LocalDate.now());
+            setBalance(getBalance().add(getBalance().multiply(new BigDecimal(interestRate))));
+        }
+    }
+    //metodo applyinterestRate
+    //comparar ultima data amb data actual i shi ha passat mes d'un any ho passes.
 }

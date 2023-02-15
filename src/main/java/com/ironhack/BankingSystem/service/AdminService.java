@@ -4,12 +4,11 @@ package com.ironhack.BankingSystem.service;
 import com.ironhack.BankingSystem.controller.AccountController;
 import com.ironhack.BankingSystem.controller.AdminController;
 import com.ironhack.BankingSystem.dto.AccountDTO;
+import com.ironhack.BankingSystem.dto.ThirdPartyDTO;
 import com.ironhack.BankingSystem.model.Accounts.*;
 import com.ironhack.BankingSystem.model.users.AccountHolder;
-import com.ironhack.BankingSystem.repository.AccountHolderRepository;
-import com.ironhack.BankingSystem.repository.AccountRepository;
-import com.ironhack.BankingSystem.repository.AdminRepository;
-import com.ironhack.BankingSystem.repository.SavingsRepository;
+import com.ironhack.BankingSystem.model.users.ThirdParty;
+import com.ironhack.BankingSystem.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -37,6 +36,9 @@ public class AdminService {
     AccountHolderRepository accountHolderRepository;
     @Autowired
     SavingsRepository savingsRepository;
+
+    @Autowired
+    ThirdPartyRepository thirdPartyRepository;
 
 
     /*
@@ -100,6 +102,20 @@ public class AdminService {
 
     /* Check balance*/
 
+      /*
+    !!!!!!!!
+    !!!!!!!!
+    !!!!!!
+interestRate de saving y creditcard
+    aqui, en checkbalance incluir interestrate and maintenance, cada vez q accountholder checke account i y revisar interestRate(anual)
+
+    !!!!!!!
+    !!!!!
+    !!!
+    !!
+    !
+     */
+
     public BigDecimal checkBalance (Long accountId){
        Account account = accountRepository.findById(accountId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
 
@@ -122,7 +138,7 @@ public class AdminService {
             account.setSecondaryOwner(newSecondaryOwnerId);
         }
 
-        //instanceOf or isInstance()?¿?¿?¿
+
 
         if (account instanceof  Checking){
             Checking checkingAccount= (Checking) account;
@@ -159,7 +175,10 @@ public class AdminService {
     public void deleteAccount (long accountId){
         accountRepository.delete(accountRepository.findById(accountId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found")));
     }
-
+    public ThirdParty createThirdPartyUser (ThirdPartyDTO thirdPartyDTO){
+        ThirdParty thirdParty = thirdPartyRepository.save(new ThirdParty(thirdPartyDTO.getNewThirdPartyName(),  thirdPartyDTO.getNewHashedKey()));
+        return thirdParty;
+    }
 
 }
 

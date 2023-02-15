@@ -23,14 +23,13 @@ public class AccountDTO {
   //Account
   private LocalDate lastPenaltyFee;
 
-  //CheckingAccount
-  private LocalDate lastMonthMaintenanceFee;
+
 
   //Savings && CreditCard
     private LocalDate lasYearInterestRate;
 
 
-    public AccountDTO(BigDecimal newBalance, String newSecretKey, Integer newPrimaryOwnerId, Integer newSecondaryOwnerId, Double newInterestRate, BigDecimal newCreditLimit, LocalDate lastPenaltyFee, LocalDate lastMonthMaintenanceFee, LocalDate lasYearInterestRate) {
+    public AccountDTO(BigDecimal newBalance, String newSecretKey, Integer newPrimaryOwnerId, Integer newSecondaryOwnerId, Double newInterestRate, BigDecimal newCreditLimit, LocalDate lastPenaltyFee,  LocalDate lasYearInterestRate) {
         this.newBalance = newBalance;
         this.newSecretKey = newSecretKey;
         this.newPrimaryOwnerId = newPrimaryOwnerId;
@@ -38,7 +37,6 @@ public class AccountDTO {
         this.newInterestRate = newInterestRate;
         this.newCreditLimit = newCreditLimit;
         this.lastPenaltyFee = lastPenaltyFee;
-        this.lastMonthMaintenanceFee = lastMonthMaintenanceFee;
         this.lasYearInterestRate = lasYearInterestRate;
     }
 
@@ -100,13 +98,6 @@ public class AccountDTO {
         this.lastPenaltyFee = lastPenaltyFee;
     }
 
-    public LocalDate getLastMonthMaintenanceFee() {
-        return lastMonthMaintenanceFee;
-    }
-
-    public void setLastMonthMaintenanceFee(LocalDate lastMonthMaintenanceFee) {
-        this.lastMonthMaintenanceFee = lastMonthMaintenanceFee;
-    }
 
     public LocalDate getLasYearInterestRate() {
         return lasYearInterestRate;

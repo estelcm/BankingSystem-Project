@@ -4,11 +4,16 @@ package com.ironhack.BankingSystem.model.users;
 import jakarta.persistence.Entity;
 
 @Entity
-class ThirdParty extends User{
+public class ThirdParty extends User{
 
    private String hashedKey;
 
    public ThirdParty() {
+   }
+
+   public ThirdParty(String name, String hashedKey) {
+      super(name);
+      this.hashedKey = hashedKey;
    }
 
    public ThirdParty(String hashedKey) {

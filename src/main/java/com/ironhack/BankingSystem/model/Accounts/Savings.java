@@ -9,6 +9,7 @@ import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 public class Savings extends Account {
@@ -79,5 +80,12 @@ public class Savings extends Account {
 
     public void setLastYearInterestRate(LocalDate lastYearInterestRate) {
         this.lastYearInterestRate = lastYearInterestRate;
+    }
+
+    public void applyInterestRate () {
+        if(Period.between(lastYearInterestRate,LocalDate.now()).getYears()>1){
+            setLastYearInterestRate(LocalDate.now());
+            setBalance(getBalance().add(getBalance().multiply(new BigDecimal(interestRate))));
+        }
     }
 }
