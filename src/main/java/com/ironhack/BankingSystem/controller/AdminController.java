@@ -2,11 +2,13 @@ package com.ironhack.BankingSystem.controller;
 
 import com.ironhack.BankingSystem.dto.AccountDTO;
 import com.ironhack.BankingSystem.dto.ThirdPartyDTO;
+import com.ironhack.BankingSystem.dto.TransactionDTO;
 import com.ironhack.BankingSystem.model.Accounts.Account;
 import com.ironhack.BankingSystem.model.Accounts.Savings;
 import com.ironhack.BankingSystem.model.users.ThirdParty;
 import com.ironhack.BankingSystem.repository.AccountRepository;
 import com.ironhack.BankingSystem.service.AdminService;
+import com.ironhack.BankingSystem.service.ThirdPartyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,9 @@ public class AdminController {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    ThirdPartyService thirdPartyService;
 
 
     @PostMapping("/create_checking_account")
@@ -65,4 +70,6 @@ public class AdminController {
     public ThirdParty createThirdParty(@RequestBody ThirdPartyDTO thirdPartyDTO) {
         return adminService.createThirdPartyUser(thirdPartyDTO);
     }
+
+
 }

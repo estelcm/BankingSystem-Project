@@ -102,19 +102,6 @@ public class AdminService {
 
     /* Check balance*/
 
-      /*
-    !!!!!!!!
-    !!!!!!!!
-    !!!!!!
-interestRate de saving y creditcard
-    aqui, en checkbalance incluir interestrate and maintenance, cada vez q accountholder checke account i y revisar interestRate(anual)
-
-    !!!!!!!
-    !!!!!
-    !!!
-    !!
-    !
-     */
 
     public BigDecimal checkBalance (Long accountId){
        Account account = accountRepository.findById(accountId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
