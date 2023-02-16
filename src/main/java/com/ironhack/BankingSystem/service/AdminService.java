@@ -21,11 +21,7 @@ import java.time.Period;
 @Service
 public class AdminService {
 
-    @Autowired
-    AdminController adminController;
 
-    @Autowired
-    AccountController accountController;
     @Autowired
     AccountRepository accountRepository;
 
