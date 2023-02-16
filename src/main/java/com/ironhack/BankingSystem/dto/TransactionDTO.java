@@ -1,6 +1,7 @@
 package com.ironhack.BankingSystem.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class TransactionDTO {
 
@@ -11,6 +12,8 @@ public class TransactionDTO {
     private Long originAccountId;
 
     private Long targetAccountId;
+
+    private LocalDateTime transactionTime= LocalDateTime.now();
 
     public TransactionDTO(String targetAccountHolderName, BigDecimal amount, Long originAccountId, Long targetAccountId) {
         this.targetAccountHolderName = targetAccountHolderName;
@@ -49,5 +52,13 @@ public class TransactionDTO {
 
     public void setTargetAccountId(Long targetAccountId) {
         this.targetAccountId = targetAccountId;
+    }
+
+    public LocalDateTime getTransactionTime() {
+        return transactionTime;
+    }
+
+    public void setTransactionTime(LocalDateTime transactionTime) {
+        this.transactionTime = transactionTime;
     }
 }
