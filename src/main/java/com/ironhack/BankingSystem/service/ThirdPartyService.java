@@ -21,6 +21,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 
+import static java.lang.StringUTF16.compareTo;
+
 @Service
 public class ThirdPartyService {
 
@@ -38,17 +40,22 @@ public class ThirdPartyService {
     public Transaction createThirdPartyTransaction (TransactionThirdDTO transactionThirdDTO, String hashedKey) throws Exception{
         ThirdParty thirdPartyKey = thirdPartyRepository.findByHashedKey(hashedKey).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"hashed key not found"));
         Account involvedAccount = accountRepository.findById(transactionThirdDTO.getInvolvedAccountId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Target Account not found"));
+
         if ( !involvedAccount.getSecretKey().equals(transactionThirdDTO.getSecretKey())){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Secret key is not right");
         }
 
 
     //involvedAccount.setBalance(involvedAccount.getBalance().add(transactionDTO.getAmount());
-    thirdPartyRepository.save(thirdPartyKey);
+
+        if (involvedAccount.getBalance().add(transactionThirdDTO.getAmount()).compareTo(involvedAccount.getBalance()) < 0) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Not enough funds");
+        }
+
         involvedAccount.setBalance(involvedAccount.getBalance().add(transactionThirdDTO.getAmount()));
 
         accountRepository.save(involvedAccount);
-        Transaction transaction = new Transaction(transactionThirdDTO.getHashedKey(), transactionThirdDTO.getAmount(), involvedAccount, null);
+        Transaction transaction = new Transaction(involvedAccount.getPrimaryOwner().getName(), transactionThirdDTO.getAmount(), null, null);
 
         transactionRepository.save(transaction);
 
