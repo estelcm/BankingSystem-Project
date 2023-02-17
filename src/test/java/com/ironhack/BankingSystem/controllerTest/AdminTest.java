@@ -1,4 +1,110 @@
 package com.ironhack.BankingSystem.controllerTest;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.BankingSystem.dto.AccountDTO;
+import com.ironhack.BankingSystem.model.Accounts.*;
+import com.ironhack.BankingSystem.model.users.AccountHolder;
+import com.ironhack.BankingSystem.model.users.Address;
+import com.ironhack.BankingSystem.repository.AccountHolderRepository;
+import com.ironhack.BankingSystem.repository.AccountRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
+@SpringBootTest
 public class AdminTest {
+
+    @Autowired
+    WebApplicationContext context;
+
+    @Autowired
+    AccountRepository accountRepository;
+
+    @Autowired
+    AccountHolderRepository accountHolderRepository;
+
+
+    private MockMvc mockMvc;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    AccountHolder accountHolder1;
+    AccountHolder accountHolder2;
+    AccountHolder accountHolder3;
+    AccountHolder accountHolder4;
+
+    Address address1;
+    Address address2;
+    Address address3;
+
+    Account originAcc;
+    Account targetAcc;
+
+
+    Checking checkingAcc1;
+    Checking checkingAcc2;
+
+    StudentChecking studentAcc1;
+
+    CreditCard creditCard;
+
+    Savings savings;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+
+        //first address bcs in order to create an accountHolder yu'll need address data
+        address1 = new Address("Colon","12b", "Masnou","280426","Spain");
+        address2 = new Address("Pamplona","71", "Barcelona","08018","Spain");
+        address3 = new Address("Overhoeksplein ","1", "Amsterdam","1031","Países Bajos");
+        address3 = new Address("Address4 ","4", "city3","44444","Country4");
+
+        accountHolder1 = new AccountHolder("Ironhack1", LocalDate.of(1998,6,3),address1,null);
+        accountHolder2 = new AccountHolder("Iornhack2", LocalDate.of(2000,2,9),address2,null);
+        accountHolder3 = new AccountHolder("Ironhack3", LocalDate.of(1990,11,10),address3,null);
+        accountHolder4 = new AccountHolder("Ironhack4", LocalDate.of(1979,4,4),address3,null);
+        accountHolderRepository.saveAll(List.of(accountHolder1, accountHolder2, accountHolder3, accountHolder4));
+
+        checkingAcc1= new Checking(new BigDecimal("15.000"),"1111jj",accountHolder1,accountHolder2);
+        checkingAcc2= new Checking(new BigDecimal("10.000"),"2222jj",accountHolder3,accountHolder4);
+        accountRepository.saveAll(List.of(checkingAcc1,checkingAcc2));
+    }
+
+    @AfterEach
+    void tearDown() {
+        accountRepository.deleteAll();
+        accountHolderRepository.deleteAll();
+    }
+
+    @Test
+    void createCheckingAcc(){
+        //accountDTO
+        //post create
+        //AccountDTO AccTest= new AccountDTO(new BigDecimal("5000"),"abcd",accountHolderTest,2,null,null,LocalDate.of(2022,10,10),LocalDate.of(2022,12,30));
+        /*
+         @Test
+    void createAccountHolder() throws Exception {
+      //en el body se escriben los datos en json
+        AccountHolderDTO accountHolderTest =new AccountHolderDTO("Antonio",LocalDate.of(1990,5,30),address1,null);
+        //convierte obj jav a json
+        String body = objectMapper.writeValueAsString(accountHolderTest);
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create_account_holder")
+                .content(body).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("Antonio"));
+    }
+         */
+
+    }
 }

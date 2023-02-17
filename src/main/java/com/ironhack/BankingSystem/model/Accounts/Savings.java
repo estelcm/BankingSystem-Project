@@ -1,7 +1,11 @@
 package com.ironhack.BankingSystem.model.Accounts;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ironhack.BankingSystem.model.Accounts.Enums.Status;
 import com.ironhack.BankingSystem.model.users.AccountHolder;
+import com.ironhack.BankingSystem.utils.LocalDateDeserializer;
+import com.ironhack.BankingSystem.utils.LocalDateSerializer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,6 +25,8 @@ public class Savings extends Account {
     @Enumerated(EnumType.STRING)
     private Status status=Status.ACTIVE;
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate lastYearInterestRate= LocalDate.now();
 
     public Savings() {

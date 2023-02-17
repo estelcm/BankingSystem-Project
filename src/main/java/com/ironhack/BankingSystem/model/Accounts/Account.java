@@ -1,6 +1,10 @@
 package com.ironhack.BankingSystem.model.Accounts;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ironhack.BankingSystem.model.users.AccountHolder;
+import com.ironhack.BankingSystem.utils.LocalDateDeserializer;
+import com.ironhack.BankingSystem.utils.LocalDateSerializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -29,8 +33,12 @@ public abstract class Account {
 
     private final BigDecimal penaltyFee= new BigDecimal("40");
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private final LocalDate creationDate = LocalDate.now();
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate LastPenaltyFee = LocalDate.now();
 
     public Account() {

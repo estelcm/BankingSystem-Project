@@ -1,5 +1,9 @@
 package com.ironhack.BankingSystem.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ironhack.BankingSystem.utils.LocalDateDeserializer;
+import com.ironhack.BankingSystem.utils.LocalDateSerializer;
 import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
@@ -17,11 +21,13 @@ public class AccountDTO {
     //interestRate needed for SavingsAccount && CreditCard
     private Double newInterestRate;
 
-  //creditLimit just needed for CreditCard
-  private BigDecimal newCreditLimit;
+     //creditLimit just needed for CreditCard
+    private BigDecimal newCreditLimit;
 
-  //Account
-  private LocalDate lastPenaltyFee;
+    //Account
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate lastPenaltyFee;
 
 
 

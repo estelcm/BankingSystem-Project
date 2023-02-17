@@ -1,6 +1,10 @@
 package com.ironhack.BankingSystem.model.Accounts;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ironhack.BankingSystem.model.users.AccountHolder;
+import com.ironhack.BankingSystem.utils.LocalDateDeserializer;
+import com.ironhack.BankingSystem.utils.LocalDateSerializer;
 import jakarta.persistence.Entity;
 
 import java.math.BigDecimal;
@@ -13,6 +17,8 @@ public class CreditCard extends Account{
 
     private Double interestRate = 0.2;
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate lastMonthInterestRate = LocalDate.now();
 
 

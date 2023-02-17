@@ -27,7 +27,7 @@ public class AccountHolderController {
 
     }
 
-    @PostMapping ("/get_balance")
+    @GetMapping ("/get_balance")
     @ResponseStatus(HttpStatus.OK)
     public BigDecimal accountHolderCheckBalance (@RequestParam Long accountId){
         return accountHolderService.checkBalance(accountId);

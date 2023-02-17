@@ -3,6 +3,7 @@ package com.ironhack.BankingSystem.controllerTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.BankingSystem.dto.AccountDTO;
 import com.ironhack.BankingSystem.dto.AccountHolderDTO;
 import com.ironhack.BankingSystem.model.Accounts.*;
 import com.ironhack.BankingSystem.model.users.AccountHolder;
@@ -90,8 +91,8 @@ public class AccountHolderTest {
         accountHolder4 = new AccountHolder("Ironhack4", LocalDate.of(1979,4,4),address3,null);
         accountHolderRepository.saveAll(List.of(accountHolder1, accountHolder2, accountHolder3, accountHolder4));
 
-        checkingAcc1= new Checking(new BigDecimal("15.000"),"1111jj",accountHolder1,accountHolder2);
-        checkingAcc2= new Checking(new BigDecimal("10.000"),"2222jj",accountHolder3,accountHolder4);
+        checkingAcc1= new Checking(new BigDecimal("15000"),"1111jj",accountHolder1,accountHolder2);
+        checkingAcc2= new Checking(new BigDecimal("10000"),"2222jj",accountHolder3,accountHolder4);
         accountRepository.saveAll(List.of(checkingAcc1,checkingAcc2));
     }
 
@@ -103,7 +104,7 @@ public class AccountHolderTest {
 
     @Test
     void createAccountHolder() throws Exception {
-      //en el bpody se escriben los datos en json
+      //en el body se escriben los datos en json
         AccountHolderDTO accountHolderTest =new AccountHolderDTO("Antonio",LocalDate.of(1990,5,30),address1,null);
         //convierte obj jav a json
         String body = objectMapper.writeValueAsString(accountHolderTest);
@@ -114,8 +115,23 @@ public class AccountHolderTest {
     }
 
     @Test
-    void createCheckingAcc(){
+    void AccHolderCheckBalance_whenIdNotFound() throws Exception{
 
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_balance").param("accountId", "40000")).andExpect(status().isNotFound()).andReturn();
+        //assertTrue(mvcResult.getResponse().getContentAsString().contains("15000"));
+
+        System.out.println(mvcResult.getResolvedException());
+
+    }
+
+    @Test
+    void AccHolder_checkBalance() throws Exception{
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_balance").param("accountId", checkingAcc1.getAccountId().toString())).andExpect(status().isOk()).andReturn();
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("15000"));
+
+        //System.out.println(mvcResult.getResolvedException());
     }
     //TODO test create account holder
     // TODO test checkbalance

@@ -1,5 +1,10 @@
 package com.ironhack.BankingSystem.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ironhack.BankingSystem.utils.LocalDateDeserializer;
+import com.ironhack.BankingSystem.utils.LocalDateSerializer;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -13,6 +18,8 @@ public class TransactionDTO {
 
     private Long targetAccountId;
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDateTime transactionTime= LocalDateTime.now();
 
     public TransactionDTO(String targetAccountHolderName, BigDecimal amount, Long originAccountId, Long targetAccountId) {
