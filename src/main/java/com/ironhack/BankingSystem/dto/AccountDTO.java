@@ -32,6 +32,8 @@ public class AccountDTO {
 
 
   //Savings && CreditCard
+  @JsonDeserialize(using = LocalDateDeserializer.class)
+  @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate lasYearInterestRate;
 
 

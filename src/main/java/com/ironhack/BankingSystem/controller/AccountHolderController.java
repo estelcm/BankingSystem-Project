@@ -20,12 +20,7 @@ public class AccountHolderController {
 
 
 
-    @PostMapping("/create_account_holder")
-    @ResponseStatus(HttpStatus.CREATED)
-    public AccountHolder createNewAccountHolder (@RequestBody AccountHolderDTO accountHolderDTO){
-        return accountHolderService.createAccountHolder(accountHolderDTO);
 
-    }
 
     @GetMapping ("/get_balance")
     @ResponseStatus(HttpStatus.OK)

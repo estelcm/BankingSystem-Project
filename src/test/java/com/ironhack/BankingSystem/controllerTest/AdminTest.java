@@ -1,9 +1,15 @@
 package com.ironhack.BankingSystem.controllerTest;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.BankingSystem.dto.AccountDTO;
+import com.ironhack.BankingSystem.dto.AccountHolderDTO;
+import com.ironhack.BankingSystem.dto.ThirdPartyDTO;
+import com.ironhack.BankingSystem.dto.TransactionDTO;
 import com.ironhack.BankingSystem.model.Accounts.*;
+import com.ironhack.BankingSystem.model.Accounts.Enums.Status;
+import com.ironhack.BankingSystem.model.transaction.Transaction;
 import com.ironhack.BankingSystem.model.users.AccountHolder;
 import com.ironhack.BankingSystem.model.users.Address;
 import com.ironhack.BankingSystem.repository.AccountHolderRepository;
@@ -13,13 +19,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.http.RequestEntity.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 public class AdminTest {
@@ -86,16 +100,9 @@ public class AdminTest {
         accountRepository.deleteAll();
         accountHolderRepository.deleteAll();
     }
-
     @Test
-    void createCheckingAcc(){
-        //accountDTO
-        //post create
-        //AccountDTO AccTest= new AccountDTO(new BigDecimal("5000"),"abcd",accountHolderTest,2,null,null,LocalDate.of(2022,10,10),LocalDate.of(2022,12,30));
-        /*
-         @Test
     void createAccountHolder() throws Exception {
-      //en el body se escriben los datos en json
+        //en el body se escriben los datos en json
         AccountHolderDTO accountHolderTest =new AccountHolderDTO("Antonio",LocalDate.of(1990,5,30),address1,null);
         //convierte obj jav a json
         String body = objectMapper.writeValueAsString(accountHolderTest);
@@ -104,7 +111,66 @@ public class AdminTest {
                 .content(body).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
         assertTrue(mvcResult.getResponse().getContentAsString().contains("Antonio"));
     }
-         */
+    @Test
+    void createCheckingAcc() throws Exception {
+        //accountDTO
+        //post create
+       AccountDTO accTest= new AccountDTO(new BigDecimal("5000"),"abcd",1,2,null,null,LocalDate.of(2022,10,10),LocalDate.of(2022,12,30));
+        String body = objectMapper.writeValueAsString(accTest);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create_checking_account")
+                .content(body)
+                .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isCreated()).andReturn();
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("abcd"));
 
     }
+
+    @Test
+    void updateAccountWhenNeeded() throws Exception {
+      AccountDTO accTest= new AccountDTO(null,"mmmm",null,null,null,null,null,null);
+
+        String body = objectMapper.writeValueAsString(accTest);
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.patch("/update_account/" + checkingAcc2.getAccountId())
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk())
+                .andReturn();
+        assertEquals("mmmm", accountRepository.findById(checkingAcc2.getAccountId()).get().getSecretKey());
+
+
+
+
+    }
+
+    @Test
+    void createThirdPartyInvolved() throws Exception {
+      //"/create_third_party"
+        //thirdPartyDTO
+        ThirdPartyDTO thirdPartyDTO= new ThirdPartyDTO("TPV","asdfgh");
+        String body= objectMapper.writeValueAsString(thirdPartyDTO);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create_third_party")
+                .content(body).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
+        assertTrue(mvcResult.getResponse().getContentAsString().contains("TPV"));
+
+
+
+
+    }
+
+    @Test
+    void AdminCan_deleteAcc() throws Exception {
+       // !!!!!!!!!!!!!!!  pathvariable
+        // "/delete_account/{id}"
+       //Long accountId
+        //created
+        MvcResult mvcResult = mockMvc.perform(delete("/delete_account/" + checkingAcc1.getAccountId()))
+                .andExpect(status().isAccepted()).andReturn();
+       assertFalse(accountRepository.findById(checkingAcc1.getAccountId()).isPresent());
+
+
+
+    }
+
 }

@@ -1,10 +1,12 @@
 package com.ironhack.BankingSystem.controller;
 
 import com.ironhack.BankingSystem.dto.AccountDTO;
+import com.ironhack.BankingSystem.dto.AccountHolderDTO;
 import com.ironhack.BankingSystem.dto.ThirdPartyDTO;
 import com.ironhack.BankingSystem.dto.TransactionDTO;
 import com.ironhack.BankingSystem.model.Accounts.Account;
 import com.ironhack.BankingSystem.model.Accounts.Savings;
+import com.ironhack.BankingSystem.model.users.AccountHolder;
 import com.ironhack.BankingSystem.model.users.ThirdParty;
 import com.ironhack.BankingSystem.repository.AccountRepository;
 import com.ironhack.BankingSystem.service.AdminService;
@@ -28,7 +30,12 @@ public class AdminController {
     @Autowired
     ThirdPartyService thirdPartyService;
 
+    @PostMapping("/create_account_holder")
+    @ResponseStatus(HttpStatus.CREATED)
+    public AccountHolder createNewAccountHolder (@RequestBody AccountHolderDTO accountHolderDTO){
+        return adminService.createAccountHolder(accountHolderDTO);
 
+    }
     @PostMapping("/create_checking_account")
     @ResponseStatus(HttpStatus.CREATED)
     public Account createNewCheckingAccount(@RequestBody AccountDTO accountDTO) {
@@ -59,8 +66,8 @@ public class AdminController {
         return adminService.updateAccount(accountDTO, accountId);
     }
 
-    @DeleteMapping("/delete-account/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/delete_account/{accountId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteAccountAndData (@PathVariable Long accountId){
         adminService.deleteAccount(accountId);
     }

@@ -4,6 +4,7 @@ package com.ironhack.BankingSystem.service;
 import com.ironhack.BankingSystem.controller.AccountController;
 import com.ironhack.BankingSystem.controller.AdminController;
 import com.ironhack.BankingSystem.dto.AccountDTO;
+import com.ironhack.BankingSystem.dto.AccountHolderDTO;
 import com.ironhack.BankingSystem.dto.ThirdPartyDTO;
 import com.ironhack.BankingSystem.model.Accounts.*;
 import com.ironhack.BankingSystem.model.users.AccountHolder;
@@ -40,6 +41,11 @@ public class AdminService {
     /*
     When creating a new Checking account, if the primaryOwner is less than 24, a StudentChecking account should be created otherwise a regular Checking Account should be created.
      */
+
+    public AccountHolder createAccountHolder(AccountHolderDTO accountHolderDTO) {
+        AccountHolder accountHolder = new AccountHolder(accountHolderDTO.getNewName(), accountHolderDTO.getNewDateOfBirth(), accountHolderDTO.getNewPrimaryAddress(), accountHolderDTO.getNewMailingAddress());
+        return accountHolderRepository.save(accountHolder);
+    }
     public Account createCheckingAccount(AccountDTO accountDTO) {
 
 

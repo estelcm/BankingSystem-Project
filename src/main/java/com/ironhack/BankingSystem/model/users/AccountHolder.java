@@ -1,5 +1,7 @@
 package com.ironhack.BankingSystem.model.users;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ironhack.BankingSystem.model.Accounts.Account;
@@ -36,10 +38,12 @@ public class AccountHolder extends User{
 
 
    @OneToMany(mappedBy = "primaryOwner")
+   @JsonIgnore
    private List<Account> primaryOwnerAccounts= new ArrayList<>();
 
 
    @OneToMany(mappedBy = "secondaryOwner")
+   @JsonIgnore
    private List<Account> secondaryOwnerAccounts= new ArrayList<>();
 
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.BankingSystem.dto.AccountDTO;
 import com.ironhack.BankingSystem.dto.AccountHolderDTO;
+import com.ironhack.BankingSystem.dto.TransactionDTO;
 import com.ironhack.BankingSystem.model.Accounts.*;
 import com.ironhack.BankingSystem.model.users.AccountHolder;
 import com.ironhack.BankingSystem.model.users.Address;
@@ -98,24 +99,14 @@ public class AccountHolderTest {
 
     @AfterEach
     void tearDown() {
+        transactionRepository.deleteAll();
         accountRepository.deleteAll();
         accountHolderRepository.deleteAll();
     }
 
-    @Test
-    void createAccountHolder() throws Exception {
-      //en el body se escriben los datos en json
-        AccountHolderDTO accountHolderTest =new AccountHolderDTO("Antonio",LocalDate.of(1990,5,30),address1,null);
-        //convierte obj jav a json
-        String body = objectMapper.writeValueAsString(accountHolderTest);
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create_account_holder")
-                .content(body).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
-        assertTrue(mvcResult.getResponse().getContentAsString().contains("Antonio"));
-    }
 
     @Test
-    void AccHolderCheckBalance_whenIdNotFound() throws Exception{
+    void AccHolderCheckBalance_whenIdNotFound_Error() throws Exception{
 
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_balance").param("accountId", "40000")).andExpect(status().isNotFound()).andReturn();
@@ -136,4 +127,21 @@ public class AccountHolderTest {
     //TODO test create account holder
     // TODO test checkbalance
     // TODO create transaction
+
+    @Test
+    public void testCreateTransaction() throws Exception {
+       //como le doy la info del idorigin acocunt
+
+        TransactionDTO transactionDTO = new TransactionDTO("Ironhack1",new BigDecimal("500"),accountRepository.findAll().get(0).getAccountId(),accountRepository.findAll().get(1).getAccountId());
+
+
+        String body = objectMapper.writeValueAsString(transactionDTO);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/create_transaction")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(transactionDTO)))
+                .andExpect(status().isCreated());
+
+        //fer dif asserts
+    }
 }

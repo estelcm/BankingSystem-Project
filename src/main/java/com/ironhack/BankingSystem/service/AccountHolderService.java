@@ -33,10 +33,7 @@ public class AccountHolderService {
     TransactionRepository transactionRepository;
 
 
-    public AccountHolder createAccountHolder(AccountHolderDTO accountHolderDTO) {
-        AccountHolder accountHolder = new AccountHolder(accountHolderDTO.getNewName(), accountHolderDTO.getNewDateOfBirth(), accountHolderDTO.getNewPrimaryAddress(), accountHolderDTO.getNewMailingAddress());
-        return accountHolderRepository.save(accountHolder);
-    }
+
 
 
     public BigDecimal checkBalance(Long accountId) {
@@ -91,10 +88,6 @@ public class AccountHolderService {
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough funds");
             }
-
-
-
-
 
         }
 
