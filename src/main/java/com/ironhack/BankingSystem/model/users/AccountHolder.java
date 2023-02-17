@@ -1,6 +1,10 @@
 package com.ironhack.BankingSystem.model.users;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ironhack.BankingSystem.model.Accounts.Account;
+import com.ironhack.BankingSystem.utils.LocalDateDeserializer;
+import com.ironhack.BankingSystem.utils.LocalDateSerializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -10,6 +14,8 @@ import java.util.List;
 @Entity
 public class AccountHolder extends User{
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateOfBirth;
 
     @NotNull
@@ -46,6 +52,7 @@ public class AccountHolder extends User{
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;
     }
+
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;

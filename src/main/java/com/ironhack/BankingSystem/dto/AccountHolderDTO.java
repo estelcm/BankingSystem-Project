@@ -1,6 +1,10 @@
 package com.ironhack.BankingSystem.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ironhack.BankingSystem.model.users.Address;
+import com.ironhack.BankingSystem.utils.LocalDateDeserializer;
+import com.ironhack.BankingSystem.utils.LocalDateSerializer;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -8,6 +12,8 @@ import java.util.Optional;
 public class AccountHolderDTO {
     private String newName;
 
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate newDateOfBirth;
 
     private Address newPrimaryAddress;
@@ -16,7 +22,7 @@ public class AccountHolderDTO {
 
 
 
-    public AccountHolderDTO(String newName, LocalDate newDateOfBirth, Address newPrimaryAddress, Address newMailingAddress, Long newPrimaryOwnerId, Long newSecondaryOwnerId) {
+    public AccountHolderDTO(String newName, LocalDate newDateOfBirth, Address newPrimaryAddress, Address newMailingAddress) {
         this.newName = newName;
         this.newDateOfBirth = newDateOfBirth;
         this.newPrimaryAddress = newPrimaryAddress;
