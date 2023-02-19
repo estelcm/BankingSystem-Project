@@ -61,9 +61,6 @@ public class AdminTest {
     Address address2;
     Address address3;
 
-    Account originAcc;
-    Account targetAcc;
-
 
     Checking checkingAcc1;
     Checking checkingAcc2;
@@ -104,7 +101,7 @@ public class AdminTest {
     void createAccountHolder() throws Exception {
         //en el body se escriben los datos en json
         AccountHolderDTO accountHolderTest =new AccountHolderDTO("Antonio",LocalDate.of(1990,5,30),address1,null);
-        //convierte obj jav a json
+        //convierte obj java a json
         String body = objectMapper.writeValueAsString(accountHolderTest);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create_account_holder")
@@ -113,8 +110,7 @@ public class AdminTest {
     }
     @Test
     void createCheckingAcc() throws Exception {
-        //accountDTO
-        //post create
+
        AccountDTO accTest= new AccountDTO(new BigDecimal("5000"),"abcd",1,2,null,null,LocalDate.of(2022,10,10),LocalDate.of(2022,12,30));
         String body = objectMapper.writeValueAsString(accTest);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create_checking_account")
@@ -146,8 +142,7 @@ public class AdminTest {
 
     @Test
     void createThirdPartyInvolved() throws Exception {
-      //"/create_third_party"
-        //thirdPartyDTO
+
         ThirdPartyDTO thirdPartyDTO= new ThirdPartyDTO("TPV","asdfgh");
         String body= objectMapper.writeValueAsString(thirdPartyDTO);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create_third_party")
@@ -161,13 +156,30 @@ public class AdminTest {
 
     @Test
     void AdminCan_deleteAcc() throws Exception {
-       // !!!!!!!!!!!!!!!  pathvariable
-        // "/delete_account/{id}"
-       //Long accountId
-        //created
+
         MvcResult mvcResult = mockMvc.perform(delete("/delete_account/" + checkingAcc1.getAccountId()))
                 .andExpect(status().isAccepted()).andReturn();
        assertFalse(accountRepository.findById(checkingAcc1.getAccountId()).isPresent());
+
+
+
+    }
+
+    //NOT WORKING! because I have one method that creates all accounts, and this restriction is in the setter(studentChecking). I don't really get how to check if I'm getting the studentChecking....
+    @Test
+    void createChecking_ifLessThan24Years() throws Exception {
+        AccountHolder HolderLess24= accountHolderRepository.save(new AccountHolder("youndAdult",LocalDate.of(2005,10,7),address1, null));
+
+        AccountDTO accTest= new AccountDTO(new BigDecimal("5000"),"abcd",1,2,null,null,LocalDate.of(2022,10,10),LocalDate.of(2022,12,30));
+        String body = objectMapper.writeValueAsString(accTest);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create_checking_account")
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isCreated()).andReturn();
+
+
+      assertTrue(StudentChecking.class.isAssignableFrom(accTest.getClass()));
 
 
 

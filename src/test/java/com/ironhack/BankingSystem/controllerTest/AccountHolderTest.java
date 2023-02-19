@@ -63,10 +63,6 @@ public class AccountHolderTest {
     Address address2;
     Address address3;
 
-    Account originAcc;
-    Account targetAcc;
-
-
     Checking checkingAcc1;
     Checking checkingAcc2;
 
@@ -142,6 +138,7 @@ public class AccountHolderTest {
                         .content(objectMapper.writeValueAsString(transactionDTO)))
                 .andExpect(status().isCreated());
 
-        //fer dif asserts
+
+
     }
 }
