@@ -82,10 +82,10 @@ public class AccountHolderTest {
         address3 = new Address("Overhoeksplein ","1", "Amsterdam","1031","Países Bajos");
         address3 = new Address("Address4 ","4", "city3","44444","Country4");
 
-        accountHolder1 = new AccountHolder("Ironhack1", LocalDate.of(1998,6,3),address1,null);
-        accountHolder2 = new AccountHolder("Iornhack2", LocalDate.of(2000,2,9),address2,null);
-        accountHolder3 = new AccountHolder("Ironhack3", LocalDate.of(1990,11,10),address3,null);
-        accountHolder4 = new AccountHolder("Ironhack4", LocalDate.of(1979,4,4),address3,null);
+        accountHolder1 = new AccountHolder("Ironhack1","Ironhack1", "1234",LocalDate.of(1998,6,3),address1,null);
+        accountHolder2 = new AccountHolder("Iornhack2", "Ironhack2", "5678",LocalDate.of(2000,2,9),address2,null);
+        accountHolder3 = new AccountHolder("Ironhack3", "Ironhack3", "0000",LocalDate.of(1990,11,10),address3,null);
+        accountHolder4 = new AccountHolder("Ironhack4","Ironhack4", "1234", LocalDate.of(1979,4,4),address3,null);
         accountHolderRepository.saveAll(List.of(accountHolder1, accountHolder2, accountHolder3, accountHolder4));
 
         checkingAcc1= new Checking(new BigDecimal("15000"),"1111jj",accountHolder1,accountHolder2);
@@ -102,7 +102,7 @@ public class AccountHolderTest {
 
 
     @Test
-    void AccHolderCheckBalance_whenIdNotFound_Error() throws Exception{
+    void AccHolderCheckBalance_whenIfNotFound_Error() throws Exception{
 
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/get_balance").param("accountId", "40000")).andExpect(status().isNotFound()).andReturn();

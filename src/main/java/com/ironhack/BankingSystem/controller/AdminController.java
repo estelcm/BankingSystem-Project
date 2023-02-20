@@ -8,6 +8,7 @@ import com.ironhack.BankingSystem.model.Accounts.Account;
 import com.ironhack.BankingSystem.model.Accounts.Savings;
 import com.ironhack.BankingSystem.model.users.AccountHolder;
 import com.ironhack.BankingSystem.model.users.ThirdParty;
+import com.ironhack.BankingSystem.model.users.User;
 import com.ironhack.BankingSystem.repository.AccountRepository;
 import com.ironhack.BankingSystem.service.AdminService;
 import com.ironhack.BankingSystem.service.ThirdPartyService;
@@ -32,7 +33,7 @@ public class AdminController {
 
     @PostMapping("/create_account_holder")
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountHolder createNewAccountHolder (@RequestBody AccountHolderDTO accountHolderDTO){
+    public User createNewAccountHolder (@RequestBody AccountHolderDTO accountHolderDTO){
         return adminService.createAccountHolder(accountHolderDTO);
 
     }

@@ -12,7 +12,7 @@ public class ThirdParty extends User{
    }
 
    public ThirdParty(String name, String hashedKey) {
-      super(name);
+      super(name, name,"eepa");
       this.hashedKey = hashedKey;
    }
 

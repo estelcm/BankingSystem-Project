@@ -2,6 +2,7 @@ package com.ironhack.BankingSystem.controllerTest;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.BankingSystem.dto.AccountDTO;
 import com.ironhack.BankingSystem.dto.AccountHolderDTO;
@@ -14,10 +15,12 @@ import com.ironhack.BankingSystem.model.users.AccountHolder;
 import com.ironhack.BankingSystem.model.users.Address;
 import com.ironhack.BankingSystem.repository.AccountHolderRepository;
 import com.ironhack.BankingSystem.repository.AccountRepository;
+import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectSerializer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -81,10 +84,11 @@ public class AdminTest {
         address3 = new Address("Overhoeksplein ","1", "Amsterdam","1031","Países Bajos");
         address3 = new Address("Address4 ","4", "city3","44444","Country4");
 
-        accountHolder1 = new AccountHolder("Ironhack1", LocalDate.of(1998,6,3),address1,null);
-        accountHolder2 = new AccountHolder("Iornhack2", LocalDate.of(2000,2,9),address2,null);
-        accountHolder3 = new AccountHolder("Ironhack3", LocalDate.of(1990,11,10),address3,null);
-        accountHolder4 = new AccountHolder("Ironhack4", LocalDate.of(1979,4,4),address3,null);
+
+        accountHolder1 = new AccountHolder("Ironhack1","Ironhack1", "1234",LocalDate.of(1998,6,3),address1,null);
+        accountHolder2 = new AccountHolder("Iornhack2", "Ironhack2", "5678",LocalDate.of(2000,2,9),address2,null);
+        accountHolder3 = new AccountHolder("Ironhack3", "Ironhack3", "0000",LocalDate.of(1990,11,10),address3,null);
+        accountHolder4 = new AccountHolder("Ironhack4","Ironhack4", "1234", LocalDate.of(1979,4,4),address3,null);
         accountHolderRepository.saveAll(List.of(accountHolder1, accountHolder2, accountHolder3, accountHolder4));
 
         checkingAcc1= new Checking(new BigDecimal("15.000"),"1111jj",accountHolder1,accountHolder2);
@@ -100,7 +104,7 @@ public class AdminTest {
     @Test
     void createAccountHolder() throws Exception {
         //en el body se escriben los datos en json
-        AccountHolderDTO accountHolderTest =new AccountHolderDTO("Antonio",LocalDate.of(1990,5,30),address1,null);
+        AccountHolderDTO accountHolderTest =new AccountHolderDTO("Antonio","Antonio", "1234",LocalDate.of(1990,5,30),address1,null);
         //convierte obj java a json
         String body = objectMapper.writeValueAsString(accountHolderTest);
 
@@ -111,16 +115,17 @@ public class AdminTest {
     @Test
     void createCheckingAcc() throws Exception {
 
-       AccountDTO accTest= new AccountDTO(new BigDecimal("5000"),"abcd",1,2,null,null,LocalDate.of(2022,10,10),LocalDate.of(2022,12,30));
+        AccountDTO accTest= new AccountDTO(new BigDecimal("5000"),"abcd",accountHolder1.getId(),null,null,null,LocalDate.of(2022,10,10),LocalDate.of(2022,12,30));
         String body = objectMapper.writeValueAsString(accTest);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create_checking_account")
-                .content(body)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isCreated()).andReturn();
         assertTrue(mvcResult.getResponse().getContentAsString().contains("abcd"));
 
     }
+
 
     @Test
     void updateAccountWhenNeeded() throws Exception {
@@ -168,9 +173,9 @@ public class AdminTest {
     //NOT WORKING! because I have one method that creates all accounts, and this restriction is in the setter(studentChecking). I don't really get how to check if I'm getting the studentChecking....
     @Test
     void createChecking_ifLessThan24Years() throws Exception {
-        AccountHolder HolderLess24= accountHolderRepository.save(new AccountHolder("youndAdult",LocalDate.of(2005,10,7),address1, null));
+        AccountHolder holderLess24= accountHolderRepository.save(new AccountHolder("youndAdult","youndAdult","1234",LocalDate.of(2005,10,7),address1, null));
 
-        AccountDTO accTest= new AccountDTO(new BigDecimal("5000"),"abcd",1,2,null,null,LocalDate.of(2022,10,10),LocalDate.of(2022,12,30));
+        AccountDTO accTest= new AccountDTO(new BigDecimal("5000"),"abcd",holderLess24.getId(),null,null,null,LocalDate.of(2022,10,10),LocalDate.of(2022,12,30));
         String body = objectMapper.writeValueAsString(accTest);
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create_checking_account")
                         .content(body)
@@ -178,8 +183,36 @@ public class AdminTest {
 
                 .andExpect(status().isCreated()).andReturn();
 
+        System.out.println(mvcResult.getResponse().getContentAsString());
+        JSONObject json = new JSONObject(mvcResult.getResponse().getContentAsString());
+        Long id = json.getLong("accountId");
+        System.out.println(id);
+        assertTrue(StudentChecking.class.isAssignableFrom(accountRepository.findById(id).get().getClass()));
 
-      assertTrue(StudentChecking.class.isAssignableFrom(accTest.getClass()));
+
+
+
+    }
+    @Test
+    void createChecking_moreThan24() throws Exception {
+        AccountHolder holderMore24= accountHolderRepository.save(new AccountHolder("youndAdult","youndAdult","1234",LocalDate.of(1998,10,7),address1, null));
+
+        AccountDTO accTest= new AccountDTO(new BigDecimal("5000"),"abcd",holderMore24.getId(),null,null,null,LocalDate.of(2022,10,10),LocalDate.of(2022,12,30));
+        String body = objectMapper.writeValueAsString(accTest);
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/create_checking_account")
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isCreated()).andReturn();
+        //el return guarda resposta a mcvresult
+        System.out.println(mvcResult.getResponse().getContentAsString());
+        //Creem un json amb la resposta
+        JSONObject json = new JSONObject(mvcResult.getResponse().getContentAsString());
+        //treiem id de l'objecte creat, agafem el json i li treiem el id
+        Long id = json.getLong("accountId");
+        System.out.println(id);
+        assertTrue(Checking.class.isAssignableFrom(accountRepository.findById(id).get().getClass()));
+
 
 
 

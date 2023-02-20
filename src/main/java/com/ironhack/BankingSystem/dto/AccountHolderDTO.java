@@ -20,13 +20,19 @@ public class AccountHolderDTO {
 
     private Address newMailingAddress;
 
+    private String newUserName;
+
+    private String newPassword;
 
 
-    public AccountHolderDTO(String newName, LocalDate newDateOfBirth, Address newPrimaryAddress, Address newMailingAddress) {
+    public AccountHolderDTO(String newName, String newUserName,String newPassword,LocalDate newDateOfBirth, Address newPrimaryAddress, Address newMailingAddress) {
         this.newName = newName;
+        this.newUserName= newUserName;
+        this.newPassword = newPassword;
         this.newDateOfBirth = newDateOfBirth;
         this.newPrimaryAddress = newPrimaryAddress;
         this.newMailingAddress = newMailingAddress;
+
 
     }
 
@@ -62,5 +68,19 @@ public class AccountHolderDTO {
         this.newMailingAddress = newMailingAddress;
     }
 
+    public String getNewUserName() {
+        return newUserName;
+    }
 
+    public void setNewUserName(String newUserName) {
+        this.newUserName = newUserName;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
 }

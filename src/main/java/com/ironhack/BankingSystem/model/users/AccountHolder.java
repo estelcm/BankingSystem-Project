@@ -20,7 +20,7 @@ public class AccountHolder extends User{
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateOfBirth;
 
-    @NotNull
+    //@NotNull
     @Embedded
     private Address primaryAddress;
 
@@ -50,8 +50,8 @@ public class AccountHolder extends User{
     public AccountHolder() {
     }
 
-    public AccountHolder(String name, LocalDate dateOfBirth, Address primaryAddress, Address mailingAddress) {
-        super(name);
+    public AccountHolder(String name, String username,String password, LocalDate dateOfBirth, Address primaryAddress, Address mailingAddress) {
+        super(name,username, password);
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;
